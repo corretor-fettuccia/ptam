@@ -1,0 +1,2777 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador PTAM - Descrição Padronizada</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none" opacity="0.05"><path d="M0,0 L100,0 L100,100 Z" fill="white"/></svg>');
+            background-size: cover;
+        }
+        
+        header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        header p {
+            font-size: 16px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .app-content {
+            display: flex;
+            flex-wrap: wrap;
+            min-height: 700px;
+        }
+        
+        .input-section {
+            flex: 1.2;
+            min-width: 400px;
+            padding: 25px;
+            border-right: 1px solid #eee;
+            background-color: #fafbfc;
+            overflow-y: auto;
+            max-height: 900px;
+        }
+        
+        .output-section {
+            flex: 1;
+            min-width: 400px;
+            padding: 25px;
+            background-color: #f9f9f9;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            color: #3498db;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+            transform: scale(1.2);
+        }
+        
+        .buttons-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: #7f8c8d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #6c7b7d;
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background-color: #27ae60;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #219653;
+            transform: translateY(-2px);
+        }
+        
+        .btn-warning {
+            background-color: #f39c12;
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background-color: #d68910;
+            transform: translateY(-2px);
+        }
+        
+        .btn-danger {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+        }
+        
+        .btn-info {
+            background-color: #17a2b8;
+            color: white;
+        }
+        
+        .btn-info:hover {
+            background-color: #138496;
+            transform: translateY(-2px);
+        }
+        
+        .output-text {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 25px;
+            min-height: 500px;
+            font-size: 15px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            font-family: 'Courier New', monospace;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .ocr-section {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 25px;
+            border: 1px dashed #adb5bd;
+            position: relative;
+        }
+        
+        .ocr-section h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #495057;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .ocr-instructions {
+            font-size: 14px;
+            color: #6c757d;
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 14px;
+            border-top: 1px solid #eee;
+            margin-top: 20px;
+            background-color: #f8f9fa;
+        }
+        
+        .status-message {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .status-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+        
+        .status-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+        
+        .status-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+            display: block;
+        }
+        
+        .tab-container {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-weight: 600;
+            color: #7f8c8d;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            color: #3498db;
+            border-bottom: 3px solid #3498db;
+            background-color: #f8f9fa;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .form-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid #3498db;
+        }
+        
+        .counter {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #3498db;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background-color: #e9ecef;
+            border-radius: 3px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: #27ae60;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .small-input {
+            max-width: 150px;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+            margin-left: 10px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: #27ae60;
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+        
+        @media (max-width: 768px) {
+            .app-content {
+                flex-direction: column;
+            }
+            
+            .input-section {
+                border-right: none;
+                border-bottom: 1px solid #eee;
+                max-height: none;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+        
+        .imovel-info-card {
+            background-color: #e8f4fc;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .info-item {
+            background-color: white;
+            padding: 12px;
+            border-radius: 5px;
+            border: 1px solid #e3e6e8;
+        }
+        
+        .info-label {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-file-contract"></i> Gerador Completo PTAM</h1>
+            <p>Ferramenta profissional para redação automática de Pareceres Técnicos de Avaliação Mercadológica</p>
+        </header>
+        
+        <div id="statusMessage" class="status-message"></div>
+        
+        <div class="progress-bar">
+            <div id="progressFill" class="progress-fill"></div>
+        </div>
+        
+        <div class="tab-container">
+            <button class="tab active" data-tab="dados-imovel"><i class="fas fa-home"></i> Dados do Imóvel</button>
+            <button class="tab" data-tab="caracteristicas"><i class="fas fa-clipboard-list"></i> Características</button>
+            <button class="tab" data-tab="infraestrutura"><i class="fas fa-tools"></i> Infraestrutura</button>
+            <button class="tab" data-tab="contexto"><i class="fas fa-map-marked-alt"></i> Contexto</button>
+            <button class="tab" data-tab="gerenciamento"><i class="fas fa-cogs"></i> Gerenciamento</button>
+        </div>
+        
+        <div class="app-content">
+            <div class="input-section">
+                <!-- ABA: DADOS DO IMÓVEL -->
+                <div id="dados-imovel" class="tab-content active">
+                    <div class="section-title">
+                        <i class="fas fa-home"></i> Dados Cadastrais do Imóvel
+                        <div class="counter" id="counter-dados">6</div>
+                    </div>
+                    
+                    <div class="ocr-section">
+                        <h3><i class="fas fa-camera"></i> Extração OCR da Matrícula</h3>
+                        <p>Use o Google Lens para capturar o texto da matrícula e cole abaixo:</p>
+                        <textarea id="ocrText" placeholder="Cole aqui o texto extraído da matrícula via OCR..."></textarea>
+                        <div class="buttons-row">
+                            <button id="processOCR" class="btn-primary">
+                                <i class="fas fa-cogs"></i> Processar OCR
+                            </button>
+                            <button id="limparOCR" class="btn-secondary">
+                                <i class="fas fa-eraser"></i> Limpar OCR
+                            </button>
+                        </div>
+                        <div class="ocr-instructions">
+                            <strong><i class="fas fa-lightbulb"></i> Dica:</strong> Fotografe a matrícula com o Google Lens, 
+                            selecione todo o texto reconhecido, copie e cole acima. O sistema extrairá automaticamente 
+                            informações como matrícula, cartório, endereço e proprietários.
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4><i class="fas fa-id-card"></i> Identificação do Imóvel</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="zoneamento"><i class="fas fa-map-marked-alt"></i> Zoneamento *</label>
+                                <select id="zoneamento" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="ZUI (Zona de Uso Industrial)">ZUI (Zona de Uso Industrial)</option>
+                                    <option value="ZEU (Zona de Uso Especial)">ZEU (Zona de Uso Especial)</option>
+                                    <option value="ZR (Zona Residencial)">ZR (Zona Residencial)</option>
+                                    <option value="ZCR (Zona Comercial e de Serviços)">ZCR (Zona Comercial e de Serviços)</option>
+                                    <option value="ZM (Zona Mista)">ZM (Zona Mista)</option>
+                                    <option value="ZR (Zona Rural)">ZR (Zona Rural)</option>
+                                    <option value="ZP (Zona de Preservação)">ZP (Zona de Preservação)</option>
+                                    <option value="ZEIS (Zona Especial de Interesse Social)">ZEIS (Zona Especial de Interesse Social)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="tipo"><i class="fas fa-building"></i> Tipo do Imóvel *</label>
+                                <select id="tipo" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="residencial">Residencial</option>
+                                    <option value="comercial">Comercial</option>
+                                    <option value="industrial">Industrial</option>
+                                    <option value="rural">Rural</option>
+                                    <option value="misto">Misto</option>
+                                    <option value="especial">Especial</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="endereco"><i class="fas fa-map-pin"></i> Endereço Completo *</label>
+                                <input type="text" id="endereco" placeholder="Rua, número, bairro, cidade, estado" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="matricula"><i class="fas fa-file-contract"></i> Matrícula do Imóvel</label>
+                                <input type="text" id="matricula" placeholder="Ex: 45.106">
+                            </div>
+                            <div class="form-group">
+                                <label for="cartorio"><i class="fas fa-landmark"></i> Cartório de Registro</label>
+                                <input type="text" id="cartorio" placeholder="Ex: Registro de Imóveis de Canoas-RS">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="subgrupo"><i class="fas fa-th"></i> Subgrupo *</label>
+                                <select id="subgrupo" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="casa">Casa</option>
+                                    <option value="apartamento">Apartamento</option>
+                                    <option value="sobrado">Sobrado</option>
+                                    <option value="pavilhao">Pavilhão Industrial</option>
+                                    <option value="galpao">Galpão</option>
+                                    <option value="lote_urbano">Lote Urbano</option>
+                                    <option value="lote_rural">Lote Rural</option>
+                                    <option value="gleba">Gleba</option>
+                                    <option value="sala_comercial">Sala Comercial</option>
+                                    <option value="loja">Loja</option>
+                                    <option value="prédio_comercial">Prédio Comercial</option>
+                                    <option value="prédio_residencial">Prédio Residencial</option>
+                                    <option value="terreno_com_benfeitorias">Terreno com Benfeitorias</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="conservacao"><i class="fas fa-clipboard-check"></i> Estado de Conservação *</label>
+                                <select id="conservacao" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="precario">Precário</option>
+                                    <option value="regular">Regular</option>
+                                    <option value="bom">Bom</option>
+                                    <option value="muito_bom">Muito Bom</option>
+                                    <option value="excelente">Excelente</option>
+                                    <option value="novo">Novo</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4><i class="fas fa-ruler-combined"></i> Dimensões e Áreas</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="area_terreno"><i class="fas fa-expand-arrows-alt"></i> Área do Terreno (m²) *</label>
+                                <input type="number" id="area_terreno" placeholder="Ex: 2100" required min="1">
+                            </div>
+                            <div class="form-group">
+                                <label for="area_construida"><i class="fas fa-building"></i> Área Construída (m²)</label>
+                                <input type="number" id="area_construida" placeholder="Ex: 1200" min="0">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="area_util"><i class="fas fa-arrows-alt"></i> Área Útil (m²)</label>
+                                <input type="number" id="area_util" placeholder="Ex: 1100" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="testada"><i class="fas fa-road"></i> Testada (m)</label>
+                                <input type="number" id="testada" placeholder="Ex: 15.00" step="0.01" min="0">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="profundidade"><i class="fas fa-ruler-vertical"></i> Profundidade (m)</label>
+                                <input type="number" id="profundidade" placeholder="Ex: 140.00" step="0.01" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="pavimentos"><i class="fas fa-layer-group"></i> Pavimentos</label>
+                                <input type="number" id="pavimentos" min="0" max="99" value="1">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4><i class="fas fa-calendar-alt"></i> Temporalidade</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="ano_construcao"><i class="fas fa-calendar"></i> Ano de Construção</label>
+                                <input type="number" id="ano_construcao" min="1800" max="2025" placeholder="Ex: 2010">
+                            </div>
+                            <div class="form-group">
+                                <label for="idade_aparente"><i class="fas fa-history"></i> Idade Aparente (anos)</label>
+                                <input type="number" id="idade_aparente" min="0" max="200" placeholder="Ex: 8">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="vida_util"><i class="fas fa-hourglass-half"></i> Vida Útil Estimada (anos)</label>
+                                <input type="number" id="vida_util" min="1" max="200" placeholder="Ex: 80" value="50">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="buttons-row">
+                        <button id="avancar-caracteristicas" class="btn-primary">
+                            <i class="fas fa-arrow-right"></i> Avançar para Características
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- ABA: CARACTERÍSTICAS -->
+                <div id="caracteristicas" class="tab-content">
+                    <div class="section-title">
+                        <i class="fas fa-clipboard-list"></i> Características Construtivas
+                        <div class="counter" id="counter-caracteristicas">4</div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4><i class="fas fa-drafting-compass"></i> Estrutura e Acabamento</h4>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="tipo_construcao"><i class="fas fa-hammer"></i> Tipo de Construção</label>
+                                <select id="tipo_construcao">
+                                    <option value="">Selecione...</option>
+                                    <option value="alvenaria">Alvenaria</option>
+                                    <option value="pre-moldado">Pré-moldado</option>
+                                    <option value="metalica">Estrutura Metálica</option>
+                                    <option value="mista">Mista</option>
+                                    <option value="madeira">Madeira</option>
+                                    <option value="concreto_armado">Concreto Armado</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="padrao_acabamento"><i class="fas fa-paint-roller"></i> Padrão de Acabamento</label>
+                                <select id="padrao_acabamento">
+                                    <option value="">Selecione...</option>
+                                    <option value="baixo">Baixo</option>
+                                    <option value="medio">Médio</option>
+                                    <option value="alto">Alto</option>
+                                    <option value="luxo">Luxo</option>
+                                    <option value="industrial">Industrial</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-check-square"></i> Elementos Construtivos Presentes</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="elem_piso" value="piso">
+                                    <label for="elem_piso">Piso específico</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="elem_cobertura" value="cobertura">
+                                    <label for="elem_cobertura">Cobertura especial</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="elem_esquadrias" value="esquadrias">
+                                    <label for="elem_esquadrias">Esquadrias</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="elem_revestimento" value="revestimento">
+                                    <label for="elem_revestimento">Revestimento</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="elem_forro" value="forro">
+                                    <label for="elem_forro">Forro</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="elem_isolamento" value="isolamento">
+                                    <label for="elem_isolamento">Isolamento térmico/acústico</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="descricao_piso"><i class="fas fa-border-style"></i> Descrição do Piso</label>
+                            <textarea id="descricao_piso" placeholder="Ex: Concreto polido nas áreas internas, concreto armado nas docas, brita nivelada no pátio..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="descricao_cobertura"><i class="fas fa-vector-square"></i> Descrição da Cobertura</label>
+                            <textarea id="descricao_cobertura" placeholder="Ex: Estrutura metálica com telhas de alumínio/zincadas, forro em PVC..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4><i class="fas fa-door-open"></i> Ambientes e Dependências</h4>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-th-list"></i> Ambientes Presentes</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="amb_escritorio" value="escritorio">
+                                    <label for="amb_escritorio">Escritório</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="amb_sala_reuniao" value="sala_reuniao">
+                                    <label for="amb_sala_reuniao">Sala de reunião</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="amb_refeitorio" value="refeitorio">
+                                    <label for="amb_refeitorio">Refeitório</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="amb_cozinha" value="cozinha">
+                                    <label for="amb_cozinha">Cozinha</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="amb_sanitario" value="sanitario">
+                                    <label for="amb_sanitario">Sanitários</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="amb_vestiario" value="vestiario">
+                                    <label for="amb_vestiario">Vestiários</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="amb_estoque" value="estoque">
+                                    <label for="amb_estoque">Estoque/Almoxarifado</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="amb_oficina" value="oficina">
+                                    <label for="amb_oficina">Oficina</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="amb_garagem" value="garagem">
+                                    <label for="amb_garagem">Garagem/Doca</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="amb_sala_maquinas" value="sala_maquinas">
+                                    <label for="amb_sala_maquinas">Sala de máquinas</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="qtd_salas"><i class="fas fa-door-closed"></i> Quantidade de Salas</label>
+                                <input type="number" id="qtd_salas" min="0" value="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="qtd_banheiros"><i class="fas fa-toilet"></i> Quantidade de Banheiros</label>
+                                <input type="number" id="qtd_banheiros" min="0" value="0">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="distribuicao_ambientes"><i class="fas fa-project-diagram"></i> Distribuição dos Ambientes</label>
+                            <textarea id="distribuicao_ambientes" placeholder="Descreva a distribuição dos ambientes no imóvel..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="buttons-row">
+                        <button id="voltar-dados" class="btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Voltar para Dados
+                        </button>
+                        <button id="avancar-infraestrutura" class="btn-primary">
+                            <i class="fas fa-arrow-right"></i> Avançar para Infraestrutura
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- ABA: INFRAESTRUTURA -->
+                <div id="infraestrutura" class="tab-content">
+                    <div class="section-title">
+                        <i class="fas fa-tools"></i> Infraestrutura e Instalações
+                        <div class="counter" id="counter-infraestrutura">3</div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4><i class="fas fa-bolt"></i> Instalações Elétricas e Hidráulicas</h4>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-plug"></i> Sistema Elétrico</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="eletrica_monofasica" value="monofasica">
+                                    <label for="eletrica_monofasica">Monofásica</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="eletrica_bifasica" value="bifasica">
+                                    <label for="eletrica_bifasica">Bifásica</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="eletrica_trifasica" value="trifasica">
+                                    <label for="eletrica_trifasica">Trifásica</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="eletrica_industrial" value="industrial">
+                                    <label for="eletrica_industrial">Padrão industrial</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="eletrica_gerador" value="gerador">
+                                    <label for="eletrica_gerador">Gerador próprio</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="eletrica_solar" value="solar">
+                                    <label for="eletrica_solar">Energia solar</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-tint"></i> Sistema Hidráulico</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="hidraulica_agua" value="agua">
+                                    <label for="hidraulica_agua">Água encanada</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="hidraulica_poço" value="poço">
+                                    <label for="hidraulica_poço">Poço artesiano</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="hidraulica_cisterna" value="cisterna">
+                                    <label for="hidraulica_cisterna">Cisterna</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="hidraulica_esgoto" value="esgoto">
+                                    <label for="hidraulica_esgoto">Rede de esgoto</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="hidraulica_fossa" value="fossa">
+                                    <label for="hidraulica_fossa">Fossa séptica</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="hidraulica_tratamento" value="tratamento">
+                                    <label for="hidraulica_tratamento">Estação de tratamento</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="capacidade_eletrica"><i class="fas fa-bolt"></i> Capacidade Elétrica (kVA)</label>
+                            <input type="number" id="capacidade_eletrica" min="0" placeholder="Ex: 75">
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4><i class="fas fa-wrench"></i> Equipamentos e Instalações Especiais</h4>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-toolbox"></i> Equipamentos Presentes</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="equip_elevador" value="elevador">
+                                    <label for="equip_elevador">Elevador</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="equip_ar_condicionado" value="ar_condicionado">
+                                    <label for="equip_ar_condicionado">Ar condicionado</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="equip_aquecimento" value="aquecimento">
+                                    <label for="equip_aquecimento">Sistema de aquecimento</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="equip_ventilacao" value="ventilacao">
+                                    <label for="equip_ventilacao">Ventilação industrial</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="equip_incendio" value="incendio">
+                                    <label for="equip_incendio">Sistema de combate a incêndio</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="equip_seguranca" value="seguranca">
+                                    <label for="equip_seguranca">Sistema de segurança</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="equip_compressor" value="compressor">
+                                    <label for="equip_compressor">Compressor de ar</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="equip_guindaste" value="guindaste">
+                                    <label for="equip_guindaste">Guindaste/ponte rolante</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="equipamentos_descricao"><i class="fas fa-list-alt"></i> Descrição dos Equipamentos</label>
+                            <textarea id="equipamentos_descricao" placeholder="Descreva os equipamentos presentes no imóvel..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4><i class="fas fa-car"></i> Acessos e Áreas Externas</h4>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-road"></i> Tipos de Acesso</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="acesso_asfalto" value="asfalto">
+                                    <label for="acesso_asfalto">Asfalto</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="acesso_pavimentado" value="pavimentado">
+                                    <label for="acesso_pavimentado">Pavimentado</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="acesso_terra" value="terra">
+                                    <label for="acesso_terra">Terra</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="acesso_calçada" value="calçada">
+                                    <label for="acesso_calçada">Calçada</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="acesso_rampa" value="rampa">
+                                    <label for="acesso_rampa">Rampa de carga</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="acesso_doca" value="doca">
+                                    <label for="acesso_doca">Doca de carga</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="vagas_estacionamento"><i class="fas fa-parking"></i> Vagas de Estacionamento</label>
+                                <input type="number" id="vagas_estacionamento" min="0" value="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="area_externa"><i class="fas fa-tree"></i> Área Externa (m²)</label>
+                                <input type="number" id="area_externa" min="0" placeholder="Ex: 500">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="buttons-row">
+                        <button id="voltar-caracteristicas" class="btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Voltar para Características
+                        </button>
+                        <button id="avancar-contexto" class="btn-primary">
+                            <i class="fas fa-arrow-right"></i> Avançar para Contexto
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- ABA: CONTEXTO -->
+                <div id="contexto" class="tab-content">
+                    <div class="section-title">
+                        <i class="fas fa-map-marked-alt"></i> Contexto Urbano e Ambiental
+                        <div class="counter" id="counter-contexto">3</div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4><i class="fas fa-city"></i> Contexto Urbano e Localização</h4>
+                        
+                        <div class="form-group">
+                            <label for="bairro_classificacao"><i class="fas fa-map"></i> Classificação do Bairro</label>
+                            <select id="bairro_classificacao">
+                                <option value="">Selecione...</option>
+                                <option value="nobre">Nobre/Valorizado</option>
+                                <option value="medio">Médio Padrão</option>
+                                <option value="popular">Popular</option>
+                                <option value="comercial">Comercial</option>
+                                <option value="industrial">Industrial</option>
+                                <option value="misto">Misto</option>
+                                <option value="rural">Rural</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+
+                            <textarea id="infraestrutura_urbana" placeholder="Descreva a infraestrutura urbana disponível: energia elétrica, água, esgoto, iluminação pública, transporte..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="acessibilidade"><i class="fas fa-car"></i> Acessibilidade e Vias de Acesso</label>
+                            <textarea id="acessibilidade" placeholder="Descreva as vias de acesso principais, proximidade com rodovias, terminais..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="equipamentos_proximos"><i class="fas fa-store"></i> Equipamentos e Serviços Próximos</label>
+                            <textarea id="equipamentos_proximos" placeholder="Mencione escolas, hospitais, comércio, bancos, etc. nas proximidades"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Restrições e Condicionantes</h4>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-water"></i> Restrições Ambientais</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="restricao_alagamento" value="alagamento">
+                                    <label for="restricao_alagamento">Área de alagamento</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="restricao_preservacao" value="preservacao">
+                                    <label for="restricao_preservacao">Área de preservação</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="restricao_APP" value="APP">
+                                    <label for="restricao_APP">APP (Área de Preservação Permanente)</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="restricao_contaminacao" value="contaminacao">
+                                    <label for="restricao_contaminacao">Contaminação do solo</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="restricao_ruido" value="ruido">
+                                    <label for="restricao_ruido">Restrição de ruído</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="restricao_zoneamento" value="zoneamento">
+                                    <label for="restricao_zoneamento">Restrições de zoneamento</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="descricao_restricoes"><i class="fas fa-file-alt"></i> Descrição das Restrições</label>
+                            <textarea id="descricao_restricoes" placeholder="Descreva em detalhes as restrições e condicionantes aplicáveis ao imóvel..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="documentacao_restricoes"><i class="fas fa-folder-open"></i> Documentação de Restrições</label>
+                            <textarea id="documentacao_restricoes" placeholder="Mencione documentos, estudos ou órgãos relacionados às restrições..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4><i class="fas fa-chart-line"></i> Mercado e Valorização</h4>
+                        
+                        <div class="form-group">
+                            <label for="tendencia_mercado"><i class="fas fa-chart-bar"></i> Tendência de Mercado na Região</label>
+                            <select id="tendencia_mercado">
+                                <option value="">Selecione...</option>
+                                <option value="valorizacao">Valorização</option>
+                                <option value="estabilidade">Estabilidade</option>
+                                <option value="desvalorizacao">Desvalorização</option>
+                                <option value="sazonal">Sazonal</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="demanda_regiao"><i class="fas fa-users"></i> Demanda na Região</label>
+                            <select id="demanda_regiao">
+                                <option value="">Selecione...</option>
+                                <option value="alta">Alta</option>
+                                <option value="media">Média</option>
+                                <option value="baixa">Baixa</option>
+                                <option value="especifica">Específica</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="observacoes_mercado"><i class="fas fa-comment-alt"></i> Observações de Mercado</label>
+                            <textarea id="observacoes_mercado" placeholder="Observações sobre liquidez, oferta, demanda, comparativos..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="buttons-row">
+                        <button id="voltar-infraestrutura" class="btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Voltar para Infraestrutura
+                        </button>
+                        <button id="avancar-gerenciamento" class="btn-primary">
+                            <i class="fas fa-arrow-right"></i> Avançar para Gerenciamento
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- ABA: GERENCIAMENTO -->
+                <div id="gerenciamento" class="tab-content">
+                    <div class="section-title">
+                        <i class="fas fa-cogs"></i> Gerenciamento e Exportação
+                        <div class="counter" id="counter-gerenciamento">4</div>
+                    </div>
+                    
+                    <div class="imovel-info-card">
+                        <h4><i class="fas fa-info-circle"></i> Resumo do Imóvel</h4>
+                        <div class="info-grid" id="resumo-imovel">
+                            <!-- Será preenchido dinamicamente -->
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4><i class="fas fa-edit"></i> Observações Finais</h4>
+                        
+                        <div class="form-group">
+                            <label for="observacoes_gerais"><i class="fas fa-sticky-note"></i> Observações Gerais *</label>
+                            <textarea id="observacoes_gerais" placeholder="Informações adicionais relevantes sobre o imóvel, características especiais, histórico..." required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="recomendacoes"><i class="fas fa-lightbulb"></i> Recomendações e Considerações</label>
+                            <textarea id="recomendacoes" placeholder="Recomendações para uso, melhorias, observações técnicas..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4><i class="fas fa-user-tie"></i> Dados do Avaliador</h4>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="avaliador_nome"><i class="fas fa-user"></i> Nome do Avaliador</label>
+                                <input type="text" id="avaliador_nome" placeholder="Ex: Roberto de Paula Fettuccia">
+                            </div>
+                            <div class="form-group">
+                                <label for="avaliador_creci"><i class="fas fa-id-badge"></i> CRECI</label>
+                                <input type="text" id="avaliador_creci" placeholder="Ex: 083599-F">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="data_vistoria"><i class="fas fa-calendar-check"></i> Data da Vistoria</label>
+                                <input type="date" id="data_vistoria" value="<?php echo date('Y-m-d'); ?>">
+                            </div>
+                            <div class="form-group">
+                                <label for="data_emissao"><i class="fas fa-calendar-alt"></i> Data de Emissão</label>
+                                <input type="date" id="data_emissao" value="<?php echo date('Y-m-d'); ?>">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="buttons-row">
+                        <button id="voltar-contexto" class="btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Voltar para Contexto
+                        </button>
+                        <button id="gerarTextoCompleto" class="btn-success">
+                            <i class="fas fa-file-alt"></i> Gerar PTAM Completo
+                        </button>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4><i class="fas fa-database"></i> Gerenciamento de Dados</h4>
+                        
+                        <div class="buttons-row">
+                            <button id="salvarAnalise" class="btn-success">
+                                <i class="fas fa-save"></i> Salvar Análise
+                            </button>
+                            <button id="carregarAnalise" class="btn-warning">
+                                <i class="fas fa-folder-open"></i> Carregar Análise
+                            </button>
+                            <button id="exportarJSON" class="btn-info">
+                                <i class="fas fa-file-export"></i> Exportar JSON
+                            </button>
+                            <button id="importarJSON" class="btn-info">
+                                <i class="fas fa-file-import"></i> Importar JSON
+                            </button>
+                        </div>
+                        
+                        <div class="buttons-row">
+                            <button id="limparTudo" class="btn-danger">
+                                <i class="fas fa-trash-alt"></i> Limpar Tudo
+                            </button>
+                            <button id="carregarExemplo" class="btn-warning">
+                                <i class="fas fa-vial"></i> Carregar Exemplo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="output-section">
+                <div class="section-title">
+                    <i class="fas fa-file-contract"></i> PTAM Gerado
+                    <div class="counter" id="counter-texto">0</div>
+                </div>
+                
+                <div class="output-text" id="outputText">
+                    <div style="text-align: center; padding: 40px; color: #7f8c8d;">
+                        <i class="fas fa-file-alt" style="font-size: 48px; margin-bottom: 20px;"></i>
+                        <h3>PTAM - Parecer Técnico de Avaliação Mercadológica</h3>
+                        <p>Preencha todos os dados nas abas ao lado e clique em "Gerar PTAM Completo"</p>
+                        <p>O texto completo do parecer técnico será gerado aqui automaticamente.</p>
+                    </div>
+                </div>
+                
+                <div class="actions">
+                    <button id="copiarTexto" class="btn-primary">
+                        <i class="fas fa-copy"></i> Copiar Texto
+                    </button>
+                    <button id="exportarTxt" class="btn-success">
+                        <i class="fas fa-download"></i> Exportar .TXT
+                    </button>
+                    <button id="exportarPdf" class="btn-danger">
+                        <i class="fas fa-file-pdf"></i> Exportar .PDF
+                    </button>
+                    <button id="limparTexto" class="btn-secondary">
+                        <i class="fas fa-eraser"></i> Limpar
+                    </button>
+                </div>
+                
+                <div class="section-title" style="margin-top: 30px;">
+                    <i class="fas fa-history"></i> Histórico de Análises
+                </div>
+                
+                <div id="analisesSalvas" class="output-text" style="min-height: 150px; font-size: 14px;">
+                    Nenhuma análise salva ainda. Preencha os dados e clique em "Salvar Análise".
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><i class="fas fa-copyright"></i> 2025 - Gerador PTAM Professional | Desenvolvido para corretores e avaliadores de imóveis</p>
+            <p><i class="fas fa-shield-alt"></i> Todos os dados são armazenados localmente no seu navegador</p>
+        </div>
+    </div>
+
+    <!-- Modal para carregar análises -->
+    <div id="modalAnalises" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+        <div style="background-color: white; padding: 30px; border-radius: 10px; width: 90%; max-width: 800px; max-height: 80vh; overflow-y: auto;">
+            <h3 style="margin-bottom: 20px; color: #2c3e50;"><i class="fas fa-folder-open"></i> Análises Salvas</h3>
+            <div id="listaAnalisesModal"></div>
+            <div style="text-align: right; margin-top: 20px;">
+                <button id="fecharModal" class="btn-secondary">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos do DOM
+            const elementos = {
+                // Abas
+                tabs: document.querySelectorAll('.tab'),
+                tabContents: document.querySelectorAll('.tab-content'),
+                
+                // Dados do Imóvel
+                zoneamento: document.getElementById('zoneamento'),
+                tipo: document.getElementById('tipo'),
+                endereco: document.getElementById('endereco'),
+                matricula: document.getElementById('matricula'),
+                cartorio: document.getElementById('cartorio'),
+                subgrupo: document.getElementById('subgrupo'),
+                conservacao: document.getElementById('conservacao'),
+                area_terreno: document.getElementById('area_terreno'),
+                area_construida: document.getElementById('area_construida'),
+                area_util: document.getElementById('area_util'),
+                testada: document.getElementById('testada'),
+                profundidade: document.getElementById('profundidade'),
+                pavimentos: document.getElementById('pavimentos'),
+                ano_construcao: document.getElementById('ano_construcao'),
+                idade_aparente: document.getElementById('idade_aparente'),
+                vida_util: document.getElementById('vida_util'),
+                
+                // Características
+                tipo_construcao: document.getElementById('tipo_construcao'),
+                padrao_acabamento: document.getElementById('padrao_acabamento'),
+                descricao_piso: document.getElementById('descricao_piso'),
+                descricao_cobertura: document.getElementById('descricao_cobertura'),
+                distribuicao_ambientes: document.getElementById('distribuicao_ambientes'),
+                qtd_salas: document.getElementById('qtd_salas'),
+                qtd_banheiros: document.getElementById('qtd_banheiros'),
+                
+                // Infraestrutura
+                capacidade_eletrica: document.getElementById('capacidade_eletrica'),
+                equipamentos_descricao: document.getElementById('equipamentos_descricao'),
+                vagas_estacionamento: document.getElementById('vagas_estacionamento'),
+                area_externa: document.getElementById('area_externa'),
+                
+                // Contexto
+                bairro_classificacao: document.getElementById('bairro_classificacao'),
+                infraestrutura_urbana: document.getElementById('infraestrutura_urbana'),
+                acessibilidade: document.getElementById('acessibilidade'),
+                equipamentos_proximos: document.getElementById('equipamentos_proximos'),
+                descricao_restricoes: document.getElementById('descricao_restricoes'),
+                documentacao_restricoes: document.getElementById('documentacao_restricoes'),
+                tendencia_mercado: document.getElementById('tendencia_mercado'),
+                demanda_regiao: document.getElementById('demanda_regiao'),
+                observacoes_mercado: document.getElementById('observacoes_mercado'),
+                
+                // Gerenciamento
+                observacoes_gerais: document.getElementById('observacoes_gerais'),
+                recomendacoes: document.getElementById('recomendacoes'),
+                avaliador_nome: document.getElementById('avaliador_nome'),
+                avaliador_creci: document.getElementById('avaliador_creci'),
+                data_vistoria: document.getElementById('data_vistoria'),
+                data_emissao: document.getElementById('data_emissao'),
+                
+                // OCR
+                ocrText: document.getElementById('ocrText'),
+                
+                // Output
+                outputText: document.getElementById('outputText'),
+                analisesSalvas: document.getElementById('analisesSalvas'),
+                statusMessage: document.getElementById('statusMessage'),
+                resumoImovel: document.getElementById('resumo-imovel'),
+                progressFill: document.getElementById('progressFill'),
+                counters: {
+                    dados: document.getElementById('counter-dados'),
+                    caracteristicas: document.getElementById('counter-caracteristicas'),
+                    infraestrutura: document.getElementById('counter-infraestrutura'),
+                    contexto: document.getElementById('counter-contexto'),
+                    gerenciamento: document.getElementById('counter-gerenciamento'),
+                    texto: document.getElementById('counter-texto')
+                }
+            };
+            
+            // Checkboxes
+            const checkboxes = {
+                // Elementos construtivos
+                elem_piso: document.getElementById('elem_piso'),
+                elem_cobertura: document.getElementById('elem_cobertura'),
+                elem_esquadrias: document.getElementById('elem_esquadrias'),
+                elem_revestimento: document.getElementById('elem_revestimento'),
+                elem_forro: document.getElementById('elem_forro'),
+                elem_isolamento: document.getElementById('elem_isolamento'),
+                
+                // Ambientes
+                amb_escritorio: document.getElementById('amb_escritorio'),
+                amb_sala_reuniao: document.getElementById('amb_sala_reuniao'),
+                amb_refeitorio: document.getElementById('amb_refeitorio'),
+                amb_cozinha: document.getElementById('amb_cozinha'),
+                amb_sanitario: document.getElementById('amb_sanitario'),
+                amb_vestiario: document.getElementById('amb_vestiario'),
+                amb_estoque: document.getElementById('amb_estoque'),
+                amb_oficina: document.getElementById('amb_oficina'),
+                amb_garagem: document.getElementById('amb_garagem'),
+                amb_sala_maquinas: document.getElementById('amb_sala_maquinas'),
+                
+                // Elétrica
+                eletrica_monofasica: document.getElementById('eletrica_monofasica'),
+                eletrica_bifasica: document.getElementById('eletrica_bifasica'),
+                eletrica_trifasica: document.getElementById('eletrica_trifasica'),
+                eletrica_industrial: document.getElementById('eletrica_industrial'),
+                eletrica_gerador: document.getElementById('eletrica_gerador'),
+                eletrica_solar: document.getElementById('eletrica_solar'),
+                
+                // Hidráulica
+                hidraulica_agua: document.getElementById('hidraulica_agua'),
+                hidraulica_poço: document.getElementById('hidraulica_poço'),
+                hidraulica_cisterna: document.getElementById('hidraulica_cisterna'),
+                hidraulica_esgoto: document.getElementById('hidraulica_esgoto'),
+                hidraulica_fossa: document.getElementById('hidraulica_fossa'),
+                hidraulica_tratamento: document.getElementById('hidraulica_tratamento'),
+                
+                // Equipamentos
+                equip_elevador: document.getElementById('equip_elevador'),
+                equip_ar_condicionado: document.getElementById('equip_ar_condicionado'),
+                equip_aquecimento: document.getElementById('equip_aquecimento'),
+                equip_ventilacao: document.getElementById('equip_ventilacao'),
+                equip_incendio: document.getElementById('equip_incendio'),
+                equip_seguranca: document.getElementById('equip_seguranca'),
+                equip_compressor: document.getElementById('equip_compressor'),
+                equip_guindaste: document.getElementById('equip_guindaste'),
+                
+                // Acessos
+                acesso_asfalto: document.getElementById('acesso_asfalto'),
+                acesso_pavimentado: document.getElementById('acesso_pavimentado'),
+                acesso_terra: document.getElementById('acesso_terra'),
+                acesso_calçada: document.getElementById('acesso_calçada'),
+                acesso_rampa: document.getElementById('acesso_rampa'),
+                acesso_doca: document.getElementById('acesso_doca'),
+                
+                // Restrições
+                restricao_alagamento: document.getElementById('restricao_alagamento'),
+                restricao_preservacao: document.getElementById('restricao_preservacao'),
+                restricao_APP: document.getElementById('restricao_APP'),
+                restricao_contaminacao: document.getElementById('restricao_contaminacao'),
+                restricao_ruido: document.getElementById('restricao_ruido'),
+                restricao_zoneamento: document.getElementById('restricao_zoneamento')
+            };
+            
+            // Botões
+            const botoes = {
+                // Navegação entre abas
+                avancarCaracteristicas: document.getElementById('avancar-caracteristicas'),
+                voltarDados: document.getElementById('voltar-dados'),
+                avancarInfraestrutura: document.getElementById('avancar-infraestrutura'),
+                voltarCaracteristicas: document.getElementById('voltar-caracteristicas'),
+                avancarContexto: document.getElementById('avancar-contexto'),
+                voltarInfraestrutura: document.getElementById('voltar-infraestrutura'),
+                avancarGerenciamento: document.getElementById('avancar-gerenciamento'),
+                voltarContexto: document.getElementById('voltar-contexto'),
+                
+                // Ações principais
+                processOCR: document.getElementById('processOCR'),
+                limparOCR: document.getElementById('limparOCR'),
+                gerarTextoCompleto: document.getElementById('gerarTextoCompleto'),
+                copiarTexto: document.getElementById('copiarTexto'),
+                exportarTxt: document.getElementById('exportarTxt'),
+                exportarPdf: document.getElementById('exportarPdf'),
+                limparTexto: document.getElementById('limparTexto'),
+                
+                // Gerenciamento
+                salvarAnalise: document.getElementById('salvarAnalise'),
+                carregarAnalise: document.getElementById('carregarAnalise'),
+                exportarJSON: document.getElementById('exportarJSON'),
+                importarJSON: document.getElementById('importarJSON'),
+                limparTudo: document.getElementById('limparTudo'),
+                carregarExemplo: document.getElementById('carregarExemplo'),
+                fecharModal: document.getElementById('fecharModal')
+            };
+            
+            // Modal
+            const modalAnalises = document.getElementById('modalAnalises');
+            const listaAnalisesModal = document.getElementById('listaAnalisesModal');
+            
+            // Inicialização
+            inicializarAplicacao();
+            
+            function inicializarAplicacao() {
+                // Configurar navegação por abas
+                configurarNavegacaoAbas();
+                
+                // Configurar listeners dos botões
+                configurarEventListeners();
+                
+                // Atualizar contadores
+                atualizarContadores();
+                atualizarBarraProgresso();
+                
+                // Carregar análises salvas
+                carregarAnalisesSalvas();
+                
+                // Atualizar resumo do imóvel
+                atualizarResumoImovel();
+                
+                // Configurar auto-save básico
+                configurarAutoSave();
+            }
+            
+            function configurarNavegacaoAbas() {
+                // Navegação entre abas
+                elementos.tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        const tabId = tab.getAttribute('data-tab');
+                        
+                        // Remover classe active de todas as abas
+                        elementos.tabs.forEach(t => t.classList.remove('active'));
+                        elementos.tabContents.forEach(tc => tc.classList.remove('active'));
+                        
+                        // Adicionar classe active na aba clicada
+                        tab.classList.add('active');
+                        document.getElementById(tabId).classList.add('active');
+                        
+                        // Atualizar contadores
+                        atualizarContadores();
+                        atualizarBarraProgresso();
+                    });
+                });
+                
+                // Botões de navegação entre abas
+                botoes.avancarCaracteristicas.addEventListener('click', () => mudarAba('caracteristicas'));
+                botoes.voltarDados.addEventListener('click', () => mudarAba('dados-imovel'));
+                botoes.avancarInfraestrutura.addEventListener('click', () => mudarAba('infraestrutura'));
+                botoes.voltarCaracteristicas.addEventListener('click', () => mudarAba('caracteristicas'));
+                botoes.avancarContexto.addEventListener('click', () => mudarAba('contexto'));
+                botoes.voltarInfraestrutura.addEventListener('click', () => mudarAba('infraestrutura'));
+                botoes.avancarGerenciamento.addEventListener('click', () => mudarAba('gerenciamento'));
+                botoes.voltarContexto.addEventListener('click', () => mudarAba('contexto'));
+            }
+            
+            function mudarAba(abaId) {
+                elementos.tabs.forEach(t => t.classList.remove('active'));
+                elementos.tabContents.forEach(tc => tc.classList.remove('active'));
+                
+                document.querySelector(`[data-tab="${abaId}"]`).classList.add('active');
+                document.getElementById(abaId).classList.add('active');
+                
+                atualizarContadores();
+                atualizarBarraProgresso();
+            }
+            
+            function configurarEventListeners() {
+                // Processar OCR
+                botoes.processOCR.addEventListener('click', processarOCR);
+                botoes.limparOCR.addEventListener('click', () => {
+                    elementos.ocrText.value = '';
+                    mostrarStatus('Campo OCR limpo!', 'success');
+                });
+                
+                // Gerar PTAM completo
+                botoes.gerarTextoCompleto.addEventListener('click', gerarPTAMCompleto);
+                
+                // Copiar texto
+                botoes.copiarTexto.addEventListener('click', copiarTexto);
+                
+                // Exportar textos
+                botoes.exportarTxt.addEventListener('click', exportarTexto);
+                botoes.exportarPdf.addEventListener('click', exportarPDF);
+                
+                // Limpar textos
+                botoes.limparTexto.addEventListener('click', limparTexto);
+                
+                // Gerenciamento de dados
+                botoes.salvarAnalise.addEventListener('click', salvarAnalise);
+                botoes.carregarAnalise.addEventListener('click', mostrarModalAnalises);
+                botoes.exportarJSON.addEventListener('click', exportarJSON);
+                botoes.importarJSON.addEventListener('click', importarJSON);
+                botoes.limparTudo.addEventListener('click', limparTudo);
+                botoes.carregarExemplo.addEventListener('click', carregarExemplo);
+                botoes.fecharModal.addEventListener('click', () => {
+                    modalAnalises.style.display = 'none';
+                });
+                
+                // Fechar modal ao clicar fora
+                modalAnalises.addEventListener('click', (e) => {
+                    if (e.target === modalAnalises) {
+                        modalAnalises.style.display = 'none';
+                    }
+                });
+                
+                // Atualizar contadores quando campos mudam
+                const todosCampos = document.querySelectorAll('input, select, textarea');
+                todosCampos.forEach(campo => {
+                    campo.addEventListener('change', () => {
+                        atualizarContadores();
+                        atualizarBarraProgresso();
+                        atualizarResumoImovel();
+                    });
+                    campo.addEventListener('input', () => {
+                        atualizarContadores();
+                        atualizarBarraProgresso();
+                        atualizarResumoImovel();
+                    });
+                });
+            }
+            
+            function atualizarContadores() {
+                // Contador para aba Dados do Imóvel
+                let contadorDados = 0;
+                const camposDados = [
+                    elementos.zoneamento, elementos.tipo, elementos.endereco, 
+                    elementos.subgrupo, elementos.conservacao, elementos.area_terreno
+                ];
+                camposDados.forEach(campo => {
+                    if (campo.value && campo.value.trim() !== '') contadorDados++;
+                });
+                elementos.counters.dados.textContent = contadorDados;
+                
+                // Contador para aba Características
+                let contadorCaracteristicas = 0;
+                const camposCaracteristicas = [
+                    elementos.tipo_construcao, elementos.padrao_acabamento,
+                    elementos.descricao_piso, elementos.distribuicao_ambientes
+                ];
+                camposCaracteristicas.forEach(campo => {
+                    if (campo.value && campo.value.trim() !== '') contadorCaracteristicas++;
+                });
+                
+                // Contar checkboxes marcados (mínimo 2)
+                const checkboxesCaracteristicas = document.querySelectorAll('#caracteristicas input[type="checkbox"]:checked');
+                if (checkboxesCaracteristicas.length >= 2) contadorCaracteristicas++;
+                
+                elementos.counters.caracteristicas.textContent = contadorCaracteristicas;
+                
+                // Contador para aba Infraestrutura
+                let contadorInfraestrutura = 0;
+                const camposInfraestrutura = [
+                    elementos.capacidade_eletrica, elementos.equipamentos_descricao
+                ];
+                camposInfraestrutura.forEach(campo => {
+                    if (campo.value && campo.value.trim() !== '') contadorInfraestrutura++;
+                });
+                
+                // Contar checkboxes marcados (mínimo 3)
+                const checkboxesInfraestrutura = document.querySelectorAll('#infraestrutura input[type="checkbox"]:checked');
+                if (checkboxesInfraestrutura.length >= 3) contadorInfraestrutura++;
+                
+                elementos.counters.infraestrutura.textContent = contadorInfraestrutura;
+                
+                // Contador para aba Contexto
+                let contadorContexto = 0;
+                const camposContexto = [
+                    elementos.bairro_classificacao, elementos.infraestrutura_urbana,
+                    elementos.descricao_restricoes
+                ];
+                camposContexto.forEach(campo => {
+                    if (campo.value && campo.value.trim() !== '') contadorContexto++;
+                });
+                elementos.counters.contexto.textContent = contadorContexto;
+                
+                // Contador para aba Gerenciamento
+                let contadorGerenciamento = 0;
+                const camposGerenciamento = [
+                    elementos.observacoes_gerais, elementos.avaliador_nome,
+                    elementos.avaliador_creci, elementos.data_emissao
+                ];
+                camposGerenciamento.forEach(campo => {
+                    if (campo.value && campo.value.trim() !== '') contadorGerenciamento++;
+                });
+                elementos.counters.gerenciamento.textContent = contadorGerenciamento;
+                
+                // Contador de palavras no texto gerado
+                if (elementos.outputText.textContent && !elementos.outputText.textContent.includes('Preencha todos os dados')) {
+                    const palavras = elementos.outputText.textContent.split(/\s+/).length;
+                    elementos.counters.texto.textContent = palavras;
+                } else {
+                    elementos.counters.texto.textContent = '0';
+                }
+            }
+            
+            function atualizarBarraProgresso() {
+                const totalCampos = 24; // Total aproximado de campos importantes
+                let camposPreenchidos = 0;
+                
+                // Verificar campos obrigatórios e importantes
+                const camposImportantes = [
+                    elementos.zoneamento, elementos.tipo, elementos.endereco,
+                    elementos.subgrupo, elementos.conservacao, elementos.area_terreno,
+                    elementos.tipo_construcao, elementos.padrao_acabamento,
+                    elementos.bairro_classificacao, elementos.observacoes_gerais
+                ];
+                
+                camposImportantes.forEach(campo => {
+                    if (campo.value && campo.value.trim() !== '') camposPreenchidos++;
+                });
+                
+                // Adicionar pontos por checkboxes marcados
+                const totalCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked').length;
+                camposPreenchidos += Math.min(totalCheckboxes / 3, 5); // Máximo 5 pontos extras
+                
+                const percentual = Math.min((camposPreenchidos / totalCampos) * 100, 100);
+                elementos.progressFill.style.width = percentual + '%';
+                
+                // Mudar cor baseada no percentual
+                if (percentual < 30) {
+                    elementos.progressFill.style.backgroundColor = '#e74c3c';
+                } else if (percentual < 70) {
+                    elementos.progressFill.style.backgroundColor = '#f39c12';
+                } else {
+                    elementos.progressFill.style.backgroundColor = '#27ae60';
+                }
+            }
+            
+            function atualizarResumoImovel() {
+                const resumo = elementos.resumoImovel;
+                let html = '';
+                
+                // Coletar informações principais
+                const info = {
+                    'Endereço': elementos.endereco.value || 'Não informado',
+                    'Tipo': elementos.tipo.value ? elementos.tipo.options[elementos.tipo.selectedIndex].text : 'Não informado',
+                    'Subgrupo': elementos.subgrupo.value ? elementos.subgrupo.options[elementos.subgrupo.selectedIndex].text : 'Não informado',
+                    'Área Terreno': elementos.area_terreno.value ? elementos.area_terreno.value + ' m²' : 'Não informado',
+                    'Área Construída': elementos.area_construida.value ? elementos.area_construida.value + ' m²' : 'Não informado',
+                    'Estado': elementos.conservacao.value ? elementos.conservacao.options[elementos.conservacao.selectedIndex].text : 'Não informado',
+                    'Zoneamento': elementos.zoneamento.value || 'Não informado',
+                    'Matrícula': elementos.matricula.value || 'Não informado'
+                };
+                
+                // Gerar HTML do resumo
+                for (const [chave, valor] of Object.entries(info)) {
+                    html += `
+                    <div class="info-item">
+                        <div class="info-label">${chave}</div>
+                        <div class="info-value">${valor}</div>
+                    </div>`;
+                }
+                
+                resumo.innerHTML = html;
+            }
+            
+            function processarOCR() {
+                const textoOCR = elementos.ocrText.value.trim();
+                
+                if (!textoOCR) {
+                    mostrarStatus('Por favor, cole o texto extraído via OCR.', 'error');
+                    return;
+                }
+                
+                // Extrair matrícula (padrões comuns)
+                const padroesMatricula = [
+                    /MATR[ÍI]CULA[\s:]*([0-9.,-]+)/i,
+                    /Matr[íi]cula[\s:]*([0-9.,-]+)/i,
+                    /N[º°]?[\s:]*([0-9.,-]+)/i,
+                    /Registro[\s:]*([0-9.,-]+)/i,
+                    /Número[\s:]*([0-9.,-]+)/i
+                ];
+                
+                for (const padrao of padroesMatricula) {
+                    const match = textoOCR.match(padrao);
+                    if (match && match[1]) {
+                        elementos.matricula.value = match[1].trim();
+                        break;
+                    }
+                }
+                
+                // Extrair cartório
+                const padroesCartorio = [
+                    /(?:Registro de Im[óo]veis|Cart[óo]rio)[\s\S]{0,150}(?:Canoas|Porto Alegre|Esteio|Novo Hamburgo|Sapucaia do Sul|São Leopoldo)/i,
+                    /(?:Comarca|Distrito)[\s\S]{0,100}(?:Canoas|Porto Alegre)/i
+                ];
+                
+                for (const padrao of padroesCartorio) {
+                    const match = textoOCR.match(padrao);
+                    if (match && match[0]) {
+                        elementos.cartorio.value = match[0].trim();
+                        break;
+                    }
+                }
+                
+                // Extrair endereço
+                const padroesEndereco = [
+                    /(?:Rua|Av\.|Avenida|Estrada|Rodovia|Travessa|Praça)[\s\S]{0,100}(?:Canoas|RS|Rio Grande do Sul)/i,
+                    /(?:Sitio|Fazenda|Ch[áa]cara)[\s\S]{0,100}(?:Canoas|RS)/i
+                ];
+                
+                for (const padrao of padroesEndereco) {
+                    const match = textoOCR.match(padrao);
+                    if (match && match[0]) {
+                        elementos.endereco.value = match[0].trim();
+                        break;
+                    }
+                }
+                
+                // Extrair área
+                const padraoArea = /(\d+[.,]?\d*)\s*m²|\b(\d+[.,]?\d*)\s*(?:metros|m\.?)\b/i;
+                const matchArea = textoOCR.match(padraoArea);
+                if (matchArea) {
+                    const area = matchArea[1] || matchArea[2];
+                    elementos.area_terreno.value = area.replace(',', '.');
+                }
+                
+                // Extrair testada e profundidade
+                const padraoTestada = /(?:frente|testada)[\s:]*(\d+[.,]?\d*)\s*m/i;
+                const matchTestada = textoOCR.match(padraoTestada);
+                if (matchTestada) {
+                    elementos.testada.value = matchTestada[1].replace(',', '.');
+                }
+                
+                const padraoProfundidade = /(?:profundidade|fundo)[\s:]*(\d+[.,]?\d*)\s*m/i;
+                const matchProfundidade = textoOCR.match(padraoProfundidade);
+                if (matchProfundidade) {
+                    elementos.profundidade.value = matchProfundidade[1].replace(',', '.');
+                }
+                
+                mostrarStatus('Texto OCR processado com sucesso! Verifique os campos preenchidos.', 'success');
+                atualizarContadores();
+                atualizarBarraProgresso();
+                atualizarResumoImovel();
+            }
+            
+            function gerarPTAMCompleto() {
+                // Validar campos obrigatórios
+                if (!validarCamposObrigatorios()) {
+                    mostrarStatus('Preencha os campos obrigatórios marcados com *', 'error');
+                    return;
+                }
+                
+                // Coletar todos os dados
+                const dados = coletarTodosDados();
+                
+                // Gerar texto do PTAM
+                const ptamCompleto = formatarPTAM(dados);
+                
+                // Exibir no output
+                elementos.outputText.textContent = ptamCompleto;
+                
+                // Atualizar contador de palavras
+                const palavras = ptamCompleto.split(/\s+/).length;
+                elementos.counters.texto.textContent = palavras;
+                
+                mostrarStatus('PTAM gerado com sucesso!', 'success');
+            }
+            
+            function validarCamposObrigatorios() {
+                const camposObrigatorios = [
+                    { campo: elementos.zoneamento, nome: 'Zoneamento' },
+                    { campo: elementos.tipo, nome: 'Tipo do Imóvel' },
+                    { campo: elementos.endereco, nome: 'Endereço' },
+                    { campo: elementos.subgrupo, nome: 'Subgrupo' },
+                    { campo: elementos.conservacao, nome: 'Estado de Conservação' },
+                    { campo: elementos.area_terreno, nome: 'Área do Terreno' },
+                    { campo: elementos.observacoes_gerais, nome: 'Observações Gerais' }
+                ];
+                
+                let valido = true;
+                let camposFaltantes = [];
+                
+                camposObrigatorios.forEach(({ campo, nome }) => {
+                    if (!campo.value || campo.value.trim() === '') {
+                        valido = false;
+                        camposFaltantes.push(nome);
+                    }
+                });
+                
+                if (!valido) {
+                    mostrarStatus(`Campos obrigatórios não preenchidos: ${camposFaltantes.join(', ')}`, 'error');
+                }
+                
+                return valido;
+            }
+            
+            function coletarTodosDados() {
+                // Coletar valores de todos os campos
+                const dados = {
+                    // Dados do Imóvel
+                    zoneamento: elementos.zoneamento.value,
+                    tipo: elementos.tipo.value,
+                    tipoTexto: elementos.tipo.options[elementos.tipo.selectedIndex]?.text || '',
+                    endereco: elementos.endereco.value,
+                    matricula: elementos.matricula.value,
+                    cartorio: elementos.cartorio.value,
+                    subgrupo: elementos.subgrupo.value,
+                    subgrupoTexto: elementos.subgrupo.options[elementos.subgrupo.selectedIndex]?.text || '',
+                    conservacao: elementos.conservacao.value,
+                    conservacaoTexto: elementos.conservacao.options[elementos.conservacao.selectedIndex]?.text || '',
+                    area_terreno: elementos.area_terreno.value,
+                    area_construida: elementos.area_construida.value,
+                    area_util: elementos.area_util.value,
+                    testada: elementos.testada.value,
+                    profundidade: elementos.profundidade.value,
+                    pavimentos: elementos.pavimentos.value,
+                    ano_construcao: elementos.ano_construcao.value,
+                    idade_aparente: elementos.idade_aparente.value,
+                    vida_util: elementos.vida_util.value,
+                    
+                    // Características
+                    tipo_construcao: elementos.tipo_construcao.value,
+                    padrao_acabamento: elementos.padrao_acabamento.value,
+                    descricao_piso: elementos.descricao_piso.value,
+                    descricao_cobertura: elementos.descricao_cobertura.value,
+                    distribuicao_ambientes: elementos.distribuicao_ambientes.value,
+                    qtd_salas: elementos.qtd_salas.value,
+                    qtd_banheiros: elementos.qtd_banheiros.value,
+                    
+                    // Checkboxes de elementos construtivos
+                    elementos_construtivos: [],
+                    ambientes: [],
+                    
+                    // Infraestrutura
+                    capacidade_eletrica: elementos.capacidade_eletrica.value,
+                    equipamentos_descricao: elementos.equipamentos_descricao.value,
+                    vagas_estacionamento: elementos.vagas_estacionamento.value,
+                    area_externa: elementos.area_externa.value,
+                    
+                    // Checkboxes de infraestrutura
+                    sistemas_eletricos: [],
+                    sistemas_hidraulicos: [],
+                    equipamentos: [],
+                    acessos: [],
+                    
+                    // Contexto
+                    bairro_classificacao: elementos.bairro_classificacao.value,
+                    infraestrutura_urbana: elementos.infraestrutura_urbana.value,
+                    acessibilidade: elementos.acessibilidade.value,
+                    equipamentos_proximos: elementos.equipamentos_proximos.value,
+                    descricao_restricoes: elementos.descricao_restricoes.value,
+                    documentacao_restricoes: elementos.documentacao_restricoes.value,
+                    tendencia_mercado: elementos.tendencia_mercado.value,
+                    demanda_regiao: elementos.demanda_regiao.value,
+                    observacoes_mercado: elementos.observacoes_mercado.value,
+                    
+                    // Checkboxes de restrições
+                    restricoes: [],
+                    
+                    // Gerenciamento
+                    observacoes_gerais: elementos.observacoes_gerais.value,
+                    recomendacoes: elementos.recomendacoes.value,
+                    avaliador_nome: elementos.avaliador_nome.value,
+                    avaliador_creci: elementos.avaliador_creci.value,
+                    data_vistoria: elementos.data_vistoria.value,
+                    data_emissao: elementos.data_emissao.value,
+                    
+                    // Data atual
+                    data_geracao: new Date().toLocaleDateString('pt-BR'),
+                    hora_geracao: new Date().toLocaleTimeString('pt-BR')
+                };
+                
+                // Coletar checkboxes marcados
+                // Elementos construtivos
+                if (checkboxes.elem_piso.checked) dados.elementos_construtivos.push('piso específico');
+                if (checkboxes.elem_cobertura.checked) dados.elementos_construtivos.push('cobertura especial');
+                if (checkboxes.elem_esquadrias.checked) dados.elementos_construtivos.push('esquadrias');
+                if (checkboxes.elem_revestimento.checked) dados.elementos_construtivos.push('revestimento');
+                if (checkboxes.elem_forro.checked) dados.elementos_construtivos.push('forro');
+                if (checkboxes.elem_isolamento.checked) dados.elementos_construtivos.push('isolamento térmico/acústico');
+                
+                // Ambientes
+                if (checkboxes.amb_escritorio.checked) dados.ambientes.push('escritório');
+                if (checkboxes.amb_sala_reuniao.checked) dados.ambientes.push('sala de reunião');
+                if (checkboxes.amb_refeitorio.checked) dados.ambientes.push('refeitório');
+                if (checkboxes.amb_cozinha.checked) dados.ambientes.push('cozinha');
+                if (checkboxes.amb_sanitario.checked) dados.ambientes.push('sanitários');
+                if (checkboxes.amb_vestiario.checked) dados.ambientes.push('vestiários');
+                if (checkboxes.amb_estoque.checked) dados.ambientes.push('estoque/almoxarifado');
+                if (checkboxes.amb_oficina.checked) dados.ambientes.push('oficina');
+                if (checkboxes.amb_garagem.checked) dados.ambientes.push('garagem/doca');
+                if (checkboxes.amb_sala_maquinas.checked) dados.ambientes.push('sala de máquinas');
+                
+                // Sistemas elétricos
+                if (checkboxes.eletrica_monofasica.checked) dados.sistemas_eletricos.push('monofásica');
+                if (checkboxes.eletrica_bifasica.checked) dados.sistemas_eletricos.push('bifásica');
+                if (checkboxes.eletrica_trifasica.checked) dados.sistemas_eletricos.push('trifásica');
+                if (checkboxes.eletrica_industrial.checked) dados.sistemas_eletricos.push('padrão industrial');
+                if (checkboxes.eletrica_gerador.checked) dados.sistemas_eletricos.push('gerador próprio');
+                if (checkboxes.eletrica_solar.checked) dados.sistemas_eletricos.push('energia solar');
+                
+                // Sistemas hidráulicos
+                if (checkboxes.hidraulica_agua.checked) dados.sistemas_hidraulicos.push('água encanada');
+                if (checkboxes.hidraulica_poço.checked) dados.sistemas_hidraulicos.push('poço artesiano');
+                if (checkboxes.hidraulica_cisterna.checked) dados.sistemas_hidraulicos.push('cisterna');
+                if (checkboxes.hidraulica_esgoto.checked) dados.sistemas_hidraulicos.push('rede de esgoto');
+                if (checkboxes.hidraulica_fossa.checked) dados.sistemas_hidraulicos.push('fossa séptica');
+                if (checkboxes.hidraulica_tratamento.checked) dados.sistemas_hidraulicos.push('estação de tratamento');
+                
+                // Equipamentos
+                if (checkboxes.equip_elevador.checked) dados.equipamentos.push('elevador');
+                if (checkboxes.equip_ar_condicionado.checked) dados.equipamentos.push('ar condicionado');
+                if (checkboxes.equip_aquecimento.checked) dados.equipamentos.push('sistema de aquecimento');
+                if (checkboxes.equip_ventilacao.checked) dados.equipamentos.push('ventilação industrial');
+                if (checkboxes.equip_incendio.checked) dados.equipamentos.push('sistema de combate a incêndio');
+                if (checkboxes.equip_seguranca.checked) dados.equipamentos.push('sistema de segurança');
+                if (checkboxes.equip_compressor.checked) dados.equipamentos.push('compressor de ar');
+                if (checkboxes.equip_guindaste.checked) dados.equipamentos.push('guindaste/ponte rolante');
+                
+                // Acessos
+                if (checkboxes.acesso_asfalto.checked) dados.acessos.push('asfalto');
+                if (checkboxes.acesso_pavimentado.checked) dados.acessos.push('pavimentado');
+                if (checkboxes.acesso_terra.checked) dados.acessos.push('terra');
+                if (checkboxes.acesso_calçada.checked) dados.acessos.push('calçada');
+                if (checkboxes.acesso_rampa.checked) dados.acessos.push('rampa de carga');
+                if (checkboxes.acesso_doca.checked) dados.acessos.push('doca de carga');
+                
+                // Restrições
+                if (checkboxes.restricao_alagamento.checked) dados.restricoes.push('área de alagamento');
+                if (checkboxes.restricao_preservacao.checked) dados.restricoes.push('área de preservação');
+                if (checkboxes.restricao_APP.checked) dados.restricoes.push('APP (Área de Preservação Permanente)');
+                if (checkboxes.restricao_contaminacao.checked) dados.restricoes.push('contaminação do solo');
+                if (checkboxes.restricao_ruido.checked) dados.restricoes.push('restrição de ruído');
+                if (checkboxes.restricao_zoneamento.checked) dados.restricoes.push('restrições de zoneamento');
+                
+                return dados;
+            }
+            
+            function formatarPTAM(dados) {
+                // Função auxiliar para formatar datas
+                function formatarData(dataString) {
+                    if (!dataString) return 'Não informada';
+                    const data = new Date(dataString);
+                    return data.toLocaleDateString('pt-BR');
+                }
+                
+                // Construir o texto do PTAM
+                let ptam = `PARECER TÉCNICO DE AVALIAÇÃO MERCADOLÓGICA - PTAM
+================================================================================
+
+1. IDENTIFICAÇÃO DO IMÓVEL
+--------------------------------------------------------------------------------
+
+Endereço: ${dados.endereco}
+Matrícula: ${dados.matricula || 'Não informada'}
+Cartório de Registro: ${dados.cartorio || 'Não informado'}
+Zoneamento: ${dados.zoneamento}
+Tipo do Imóvel: ${dados.tipoTexto}
+Subgrupo: ${dados.subgrupoTexto}
+Estado de Conservação: ${dados.conservacaoTexto}
+
+2. CARACTERÍSTICAS FÍSICAS
+--------------------------------------------------------------------------------
+
+2.1. Dimensões e Áreas
+Área do Terreno: ${dados.area_terreno} m²
+${dados.area_construida ? `Área Construída: ${dados.area_construida} m²` : ''}
+${dados.area_util ? `Área Útil: ${dados.area_util} m²` : ''}
+${dados.testada ? `Testada: ${dados.testada} m` : ''}
+${dados.profundidade ? `Profundidade: ${dados.profundidade} m` : ''}
+${dados.pavimentos ? `Pavimentos: ${dados.pavimentos}` : ''}
+
+2.2. Temporalidade
+${dados.ano_construcao ? `Ano de Construção: ${dados.ano_construcao}` : ''}
+${dados.idade_aparente ? `Idade Aparente: ${dados.idade_aparente} anos` : ''}
+${dados.vida_util ? `Vida Útil Estimada: ${dados.vida_util} anos` : ''}
+
+2.3. Características Construtivas
+${dados.tipo_construcao ? `Tipo de Construção: ${dados.tipo_construcao}` : ''}
+${dados.padrao_acabamento ? `Padrão de Acabamento: ${dados.padrao_acabamento}` : ''}
+
+${dados.elementos_construtivos.length > 0 ? `Elementos Construtivos Presentes: ${dados.elementos_construtivos.join(', ')}` : ''}
+
+${dados.descricao_piso ? `Descrição do Piso: ${dados.descricao_piso}` : ''}
+${dados.descricao_cobertura ? `Descrição da Cobertura: ${dados.descricao_cobertura}` : ''}
+
+2.4. Ambientes e Dependências
+${dados.ambientes.length > 0 ? `Ambientes Presentes: ${dados.ambientes.join(', ')}` : ''}
+${dados.qtd_salas ? `Quantidade de Salas: ${dados.qtd_salas}` : ''}
+${dados.qtd_banheiros ? `Quantidade de Banheiros: ${dados.qtd_banheiros}` : ''}
+
+${dados.distribuicao_ambientes ? `Distribuição dos Ambientes: ${dados.distribuicao_ambientes}` : ''}
+
+3. INFRAESTRUTURA E INSTALAÇÕES
+--------------------------------------------------------------------------------
+
+3.1. Instalações Elétricas
+${dados.sistemas_eletricos.length > 0 ? `Sistemas Elétricos: ${dados.sistemas_eletricos.join(', ')}` : ''}
+${dados.capacidade_eletrica ? `Capacidade Elétrica: ${dados.capacidade_eletrica} kVA` : ''}
+
+3.2. Instalações Hidráulicas
+${dados.sistemas_hidraulicos.length > 0 ? `Sistemas Hidráulicos: ${dados.sistemas_hidraulicos.join(', ')}` : ''}
+
+3.3. Equipamentos
+${dados.equipamentos.length > 0 ? `Equipamentos Presentes: ${dados.equipamentos.join(', ')}` : ''}
+${dados.equipamentos_descricao ? `Descrição dos Equipamentos: ${dados.equipamentos_descricao}` : ''}
+
+3.4. Acessos e Áreas Externas
+${dados.acessos.length > 0 ? `Tipos de Acesso: ${dados.acessos.join(', ')}` : ''}
+${dados.vagas_estacionamento ? `Vagas de Estacionamento: ${dados.vagas_estacionamento}` : ''}
+${dados.area_externa ? `Área Externa: ${dados.area_externa} m²` : ''}
+
+4. CONTEXTO URBANO E AMBIENTAL
+--------------------------------------------------------------------------------
+
+4.1. Localização e Entorno
+${dados.bairro_classificacao ? `Classificação do Bairro: ${dados.bairro_classificacao}` : ''}
+
+${dados.infraestrutura_urbana ? `Infraestrutura Urbana: ${dados.infraestrutura_urbana}` : ''}
+
+${dados.acessibilidade ? `Acessibilidade: ${dados.acessibilidade}` : ''}
+
+${dados.equipamentos_proximos ? `Equipamentos e Serviços Próximos: ${dados.equipamentos_proximos}` : ''}
+
+4.2. Restrições e Condicionantes
+${dados.restricoes.length > 0 ? `Restrições Ambientais: ${dados.restricoes.join(', ')}` : ''}
+
+${dados.descricao_restricoes ? `Descrição das Restrições: ${dados.descricao_restricoes}` : ''}
+
+${dados.documentacao_restricoes ? `Documentação de Restrições: ${dados.documentacao_restricoes}` : ''}
+
+4.3. Mercado e Valorização
+${dados.tendencia_mercado ? `Tendência de Mercado: ${dados.tendencia_mercado}` : ''}
+${dados.demanda_regiao ? `Demanda na Região: ${dados.demanda_regiao}` : ''}
+
+${dados.observacoes_mercado ? `Observações de Mercado: ${dados.observacoes_mercado}` : ''}
+
+5. OBSERVAÇÕES E CONSIDERAÇÕES
+--------------------------------------------------------------------------------
+
+${dados.observacoes_gerais ? `Observações Gerais: ${dados.observacoes_gerais}` : ''}
+
+${dados.recomendacoes ? `Recomendações: ${dados.recomendacoes}` : ''}
+
+6. DADOS DA AVALIAÇÃO
+--------------------------------------------------------------------------------
+
+Avaliador: ${dados.avaliador_nome || 'Não informado'}
+CRECI: ${dados.avaliador_creci || 'Não informado'}
+Data da Vistoria: ${formatarData(dados.data_vistoria)}
+Data de Emissão: ${formatarData(dados.data_emissao)}
+
+================================================================================
+PTAM gerado em ${dados.data_geracao} às ${dados.hora_geracao}
+Via Gerador PTAM Professional
+================================================================================`;
+
+                return ptam;
+            }
+            
+            function copiarTexto() {
+                const texto = elementos.outputText.textContent;
+                
+                if (!texto || texto.includes('Preencha todos os dados')) {
+                    mostrarStatus('Nenhum texto gerado para copiar.', 'error');
+                    return;
+                }
+                
+                navigator.clipboard.writeText(texto)
+                    .then(() => {
+                        mostrarStatus('Texto copiado para a área de transferência!', 'success');
+                    })
+                    .catch(err => {
+                        console.error('Erro ao copiar texto: ', err);
+                        mostrarStatus('Erro ao copiar texto.', 'error');
+                    });
+            }
+            
+            function exportarTexto() {
+                const texto = elementos.outputText.textContent;
+                
+                if (!texto || texto.includes('Preencha todos os dados')) {
+                    mostrarStatus('Nenhum texto gerado para exportar.', 'error');
+                    return;
+                }
+                
+                const endereco = elementos.endereco.value || 'imovel';
+                const nomeArquivo = `PTAM_${endereco.replace(/[^a-z0-9]/gi, '_')}_${new Date().toISOString().slice(0,10)}.txt`;
+                
+                const blob = new Blob([texto], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = nomeArquivo;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                mostrarStatus('Texto exportado como arquivo .TXT!', 'success');
+            }
+            
+            function exportarPDF() {
+                const texto = elementos.outputText.textContent;
+                
+                if (!texto || texto.includes('Preencha todos os dados')) {
+                    mostrarStatus('Nenhum texto gerado para exportar em PDF.', 'error');
+                    return;
+                }
+                
+                // Em uma implementação real, aqui usaria uma biblioteca como jsPDF
+                // Por enquanto, vamos apenas mostrar uma mensagem
+                mostrarStatus('Funcionalidade de exportação PDF em desenvolvimento. Use a exportação TXT por enquanto.', 'info');
+                
+                // Implementação básica com print
+                const janelaPrint = window.open('', '_blank');
+                janelaPrint.document.write(`
+                    <html>
+                    <head>
+                        <title>PTAM - ${elementos.endereco.value || 'Imóvel'}</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; }
+                            h1 { color: #2c3e50; border-bottom: 2px solid #3498db; }
+                            .section { margin-bottom: 30px; }
+                            .section-title { color: #2c3e50; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-top: 20px; }
+                            .footer { margin-top: 50px; font-size: 12px; color: #7f8c8d; text-align: center; }
+                            @media print {
+                                body { padding: 0; }
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>PARECER TÉCNICO DE AVALIAÇÃO MERCADOLÓGICA - PTAM</h1>
+                        <div style="white-space: pre-wrap; font-family: monospace;">${texto}</div>
+                        <div class="footer">
+                            <p>Emitido em ${new Date().toLocaleDateString('pt-BR')} via Gerador PTAM Professional</p>
+                        </div>
+                        <script>
+                            window.onload = function() {
+                                window.print();
+                            };
+                        <\/script>
+                    </body>
+                    </html>
+                `);
+                janelaPrint.document.close();
+            }
+            
+            function limparTexto() {
+                elementos.outputText.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #7f8c8d;">
+                        <i class="fas fa-file-alt" style="font-size: 48px; margin-bottom: 20px;"></i>
+                        <h3>PTAM - Parecer Técnico de Avaliação Mercadológica</h3>
+                        <p>Preencha todos os dados nas abas ao lado e clique em "Gerar PTAM Completo"</p>
+                        <p>O texto completo do parecer técnico será gerado aqui automaticamente.</p>
+                    </div>`;
+                elementos.counters.texto.textContent = '0';
+                mostrarStatus('Texto limpo com sucesso!', 'success');
+            }
+            
+            function salvarAnalise() {
+                const dados = coletarTodosDados();
+                const endereco = dados.endereco || 'Imóvel sem endereço';
+                const data = new Date().toLocaleString('pt-BR');
+                
+                // Criar objeto de análise
+                const analise = {
+                    id: Date.now(),
+                    nome: `${endereco.substring(0, 50)}${endereco.length > 50 ? '...' : ''}`,
+                    data: data,
+                    dados: dados,
+                    timestamp: Date.now()
+                };
+                
+                // Recuperar análises existentes
+                let analises = JSON.parse(localStorage.getItem('ptamAnalises') || '[]');
+                
+                // Adicionar nova análise
+                analises.unshift(analise); // Adicionar no início
+                
+                // Limitar a 50 análises salvas
+                if (analises.length > 50) {
+                    analises = analises.slice(0, 50);
+                }
+                
+                // Salvar no localStorage
+                localStorage.setItem('ptamAnalises', JSON.stringify(analises));
+                
+                // Atualizar a lista de análises salvas
+                carregarAnalisesSalvas();
+                
+                mostrarStatus(`Análise salva com sucesso! (${analises.length} análises salvas)`, 'success');
+            }
+            
+            function carregarAnalisesSalvas() {
+                const analises = JSON.parse(localStorage.getItem('ptamAnalises') || '[]');
+                
+                if (analises.length === 0) {
+                    elementos.analisesSalvas.innerHTML = `
+                        <div style="text-align: center; padding: 20px; color: #7f8c8d;">
+                            <i class="fas fa-inbox" style="font-size: 36px; margin-bottom: 10px;"></i>
+                            <p>Nenhuma análise salva ainda.</p>
+                            <p>Preencha os dados e clique em "Salvar Análise".</p>
+                        </div>`;
+                    return;
+                }
+                
+                let listaHTML = `<div style="margin-bottom: 15px;"><strong>${analises.length} análise(s) salva(s):</strong></div>`;
+                
+                analises.forEach((analise, index) => {
+                    listaHTML += `
+                    <div style="background-color: ${index % 2 === 0 ? '#f8f9fa' : 'white'}; padding: 10px; border-radius: 5px; margin-bottom: 8px; border-left: 3px solid #3498db;">
+                        <div style="font-weight: bold; margin-bottom: 5px;">${analise.nome}</div>
+                        <div style="font-size: 12px; color: #7f8c8d; margin-bottom: 8px;">Salvo em: ${analise.data}</div>
+                        <div>
+                            <button onclick="carregarAnalisePorId(${analise.id})" style="padding: 5px 10px; background-color: #3498db; color: white; border: none; border-radius: 3px; font-size: 12px; cursor: pointer; margin-right: 5px;">
+                                <i class="fas fa-upload"></i> Carregar
+                            </button>
+                            <button onclick="excluirAnalisePorId(${analise.id})" style="padding: 5px 10px; background-color: #e74c3c; color: white; border: none; border-radius: 3px; font-size: 12px; cursor: pointer;">
+                                <i class="fas fa-trash"></i> Excluir
+                            </button>
+                        </div>
+                    </div>`;
+                });
+                
+                elementos.analisesSalvas.innerHTML = listaHTML;
+            }
+            
+            // Funções globais para os botões na lista de análises
+            window.carregarAnalisePorId = function(id) {
+                const analises = JSON.parse(localStorage.getItem('ptamAnalises') || '[]');
+                const analise = analises.find(a => a.id === id);
+                
+                if (analise) {
+                    carregarDadosAnalise(analise.dados);
+                    mostrarStatus(`Análise "${analise.nome}" carregada com sucesso!`, 'success');
+                    modalAnalises.style.display = 'none';
+                }
+            };
+            
+            window.excluirAnalisePorId = function(id) {
+                if (confirm('Tem certeza que deseja excluir esta análise?')) {
+                    let analises = JSON.parse(localStorage.getItem('ptamAnalises') || '[]');
+                    analises = analises.filter(a => a.id !== id);
+                    
+                    localStorage.setItem('ptamAnalises', JSON.stringify(analises));
+                    carregarAnalisesSalvas();
+                    
+                    mostrarStatus('Análise excluída com sucesso!', 'success');
+                }
+            };
+            
+            function mostrarModalAnalises() {
+                const analises = JSON.parse(localStorage.getItem('ptamAnalises') || '[]');
+                
+                if (analises.length === 0) {
+                    mostrarStatus('Nenhuma análise salva para carregar.', 'error');
+                    return;
+                }
+                
+                let modalHTML = '';
+                
+                analises.forEach((analise, index) => {
+                    modalHTML += `
+                    <div style="background-color: ${index % 2 === 0 ? '#f8f9fa' : 'white'}; padding: 15px; border-radius: 5px; margin-bottom: 10px; border: 1px solid #e3e6e8;">
+                        <div style="font-weight: bold; font-size: 16px; margin-bottom: 5px;">${analise.nome}</div>
+                        <div style="font-size: 14px; color: #7f8c8d; margin-bottom: 10px;">Salvo em: ${analise.data}</div>
+                        <div>
+                            <button onclick="carregarAnalisePorId(${analise.id})" style="padding: 8px 15px; background-color: #3498db; color: white; border: none; border-radius: 3px; font-size: 14px; cursor: pointer; margin-right: 8px;">
+                                <i class="fas fa-upload"></i> Carregar
+                            </button>
+                            <button onclick="excluirAnalisePorId(${analise.id})" style="padding: 8px 15px; background-color: #e74c3c; color: white; border: none; border-radius: 3px; font-size: 14px; cursor: pointer;">
+                                <i class="fas fa-trash"></i> Excluir
+                            </button>
+                        </div>
+                    </div>`;
+                });
+                
+                listaAnalisesModal.innerHTML = modalHTML;
+                modalAnalises.style.display = 'flex';
+            }
+            
+            function carregarDadosAnalise(dados) {
+                // Dados do Imóvel
+                elementos.zoneamento.value = dados.zoneamento || '';
+                elementos.tipo.value = dados.tipo || '';
+                elementos.endereco.value = dados.endereco || '';
+                elementos.matricula.value = dados.matricula || '';
+                elementos.cartorio.value = dados.cartorio || '';
+                elementos.subgrupo.value = dados.subgrupo || '';
+                elementos.conservacao.value = dados.conservacao || '';
+                elementos.area_terreno.value = dados.area_terreno || '';
+                elementos.area_construida.value = dados.area_construida || '';
+                elementos.area_util.value = dados.area_util || '';
+                elementos.testada.value = dados.testada || '';
+                elementos.profundidade.value = dados.profundidade || '';
+                elementos.pavimentos.value = dados.pavimentos || '1';
+                elementos.ano_construcao.value = dados.ano_construcao || '';
+                elementos.idade_aparente.value = dados.idade_aparente || '';
+                elementos.vida_util.value = dados.vida_util || '50';
+                
+                // Características
+                elementos.tipo_construcao.value = dados.tipo_construcao || '';
+                elementos.padrao_acabamento.value = dados.padrao_acabamento || '';
+                elementos.descricao_piso.value = dados.descricao_piso || '';
+                elementos.descricao_cobertura.value = dados.descricao_cobertura || '';
+                elementos.distribuicao_ambientes.value = dados.distribuicao_ambientes || '';
+                elementos.qtd_salas.value = dados.qtd_salas || '0';
+                elementos.qtd_banheiros.value = dados.qtd_banheiros || '0';
+                
+                // Restaurar checkboxes de elementos construtivos
+                const elementosConstrutivos = dados.elementos_construtivos || [];
+                checkboxes.elem_piso.checked = elementosConstrutivos.includes('piso específico');
+                checkboxes.elem_cobertura.checked = elementosConstrutivos.includes('cobertura especial');
+                checkboxes.elem_esquadrias.checked = elementosConstrutivos.includes('esquadrias');
+                checkboxes.elem_revestimento.checked = elementosConstrutivos.includes('revestimento');
+                checkboxes.elem_forro.checked = elementosConstrutivos.includes('forro');
+                checkboxes.elem_isolamento.checked = elementosConstrutivos.includes('isolamento térmico/acústico');
+                
+                // Restaurar checkboxes de ambientes
+                const ambientes = dados.ambientes || [];
+                checkboxes.amb_escritorio.checked = ambientes.includes('escritório');
+                checkboxes.amb_sala_reuniao.checked = ambientes.includes('sala de reunião');
+                checkboxes.amb_refeitorio.checked = ambientes.includes('refeitório');
+                checkboxes.amb_cozinha.checked = ambientes.includes('cozinha');
+                checkboxes.amb_sanitario.checked = ambientes.includes('sanitários');
+                checkboxes.amb_vestiario.checked = ambientes.includes('vestiários');
+                checkboxes.amb_estoque.checked = ambientes.includes('estoque/almoxarifado');
+                checkboxes.amb_oficina.checked = ambientes.includes('oficina');
+                checkboxes.amb_garagem.checked = ambientes.includes('garagem/doca');
+                checkboxes.amb_sala_maquinas.checked = ambientes.includes('sala de máquinas');
+                
+                // Infraestrutura
+                elementos.capacidade_eletrica.value = dados.capacidade_eletrica || '';
+                elementos.equipamentos_descricao.value = dados.equipamentos_descricao || '';
+                elementos.vagas_estacionamento.value = dados.vagas_estacionamento || '0';
+                elementos.area_externa.value = dados.area_externa || '';
+                
+                // Restaurar checkboxes de sistemas elétricos
+                const sistemasEletricos = dados.sistemas_eletricos || [];
+                checkboxes.eletrica_monofasica.checked = sistemasEletricos.includes('monofásica');
+                checkboxes.eletrica_bifasica.checked = sistemasEletricos.includes('bifásica');
+                checkboxes.eletrica_trifasica.checked = sistemasEletricos.includes('trifásica');
+                checkboxes.eletrica_industrial.checked = sistemasEletricos.includes('padrão industrial');
+                checkboxes.eletrica_gerador.checked = sistemasEletricos.includes('gerador próprio');
+                checkboxes.eletrica_solar.checked = sistemasEletricos.includes('energia solar');
+                
+                // Restaurar checkboxes de sistemas hidráulicos
+                const sistemasHidraulicos = dados.sistemas_hidraulicos || [];
+                checkboxes.hidraulica_agua.checked = sistemasHidraulicos.includes('água encanada');
+                checkboxes.hidraulica_poço.checked = sistemasHidraulicos.includes('poço artesiano');
+                checkboxes.hidraulica_cisterna.checked = sistemasHidraulicos.includes('cisterna');
+                checkboxes.hidraulica_esgoto.checked = sistemasHidraulicos.includes('rede de esgoto');
+                checkboxes.hidraulica_fossa.checked = sistemasHidraulicos.includes('fossa séptica');
+                checkboxes.hidraulica_tratamento.checked = sistemasHidraulicos.includes('estação de tratamento');
+                
+                // Restaurar checkboxes de equipamentos
+                const equipamentos = dados.equipamentos || [];
+                checkboxes.equip_elevador.checked = equipamentos.includes('elevador');
+                checkboxes.equip_ar_condicionado.checked = equipamentos.includes('ar condicionado');
+                checkboxes.equip_aquecimento.checked = equipamentos.includes('sistema de aquecimento');
+                checkboxes.equip_ventilacao.checked = equipamentos.includes('ventilação industrial');
+                checkboxes.equip_incendio.checked = equipamentos.includes('sistema de combate a incêndio');
+                checkboxes.equip_seguranca.checked = equipamentos.includes('sistema de segurança');
+                checkboxes.equip_compressor.checked = equipamentos.includes('compressor de ar');
+                checkboxes.equip_guindaste.checked = equipamentos.includes('guindaste/ponte rolante');
+                
+                // Restaurar checkboxes de acessos
+                const acessos = dados.acessos || [];
+                checkboxes.acesso_asfalto.checked = acessos.includes('asfalto');
+                checkboxes.acesso_pavimentado.checked = acessos.includes('pavimentado');
+                checkboxes.acesso_terra.checked = acessos.includes('terra');
+                checkboxes.acesso_calçada.checked = acessos.includes('calçada');
+                checkboxes.acesso_rampa.checked = acessos.includes('rampa de carga');
+                checkboxes.acesso_doca.checked = acessos.includes('doca de carga');
+                
+                // Contexto
+                elementos.bairro_classificacao.value = dados.bairro_classificacao || '';
+                elementos.infraestrutura_urbana.value = dados.infraestrutura_urbana || '';
+                elementos.acessibilidade.value = dados.acessibilidade || '';
+                elementos.equipamentos_proximos.value = dados.equipamentos_proximos || '';
+                elementos.descricao_restricoes.value = dados.descricao_restricoes || '';
+                elementos.documentacao_restricoes.value = dados.documentacao_restricoes || '';
+                elementos.tendencia_mercado.value = dados.tendencia_mercado || '';
+                elementos.demanda_regiao.value = dados.demanda_regiao || '';
+                elementos.observacoes_mercado.value = dados.observacoes_mercado || '';
+                
+                // Restaurar checkboxes de restrições
+                const restricoes = dados.restricoes || [];
+                checkboxes.restricao_alagamento.checked = restricoes.includes('área de alagamento');
+                checkboxes.restricao_preservacao.checked = restricoes.includes('área de preservação');
+                checkboxes.restricao_APP.checked = restricoes.includes('APP (Área de Preservação Permanente)');
+                checkboxes.restricao_contaminacao.checked = restricoes.includes('contaminação do solo');
+                checkboxes.restricao_ruido.checked = restricoes.includes('restrição de ruído');
+                checkboxes.restricao_zoneamento.checked = restricoes.includes('restrições de zoneamento');
+                
+                // Gerenciamento
+                elementos.observacoes_gerais.value = dados.observacoes_gerais || '';
+                elementos.recomendacoes.value = dados.recomendacoes || '';
+                elementos.avaliador_nome.value = dados.avaliador_nome || '';
+                elementos.avaliador_creci.value = dados.avaliador_creci || '';
+                elementos.data_vistoria.value = dados.data_vistoria || '';
+                elementos.data_emissao.value = dados.data_emissao || '';
+                
+                // Atualizar contadores e barra de progresso
+                atualizarContadores();
+                atualizarBarraProgresso();
+                atualizarResumoImovel();
+                
+                // Gerar o PTAM novamente se houver dados suficientes
+                if (dados.endereco && dados.tipo && dados.zoneamento) {
+                    const ptamCompleto = formatarPTAM(dados);
+                    elementos.outputText.textContent = ptamCompleto;
+                    const palavras = ptamCompleto.split(/\s+/).length;
+                    elementos.counters.texto.textContent = palavras;
+                }
+            }
+            
+            function exportarJSON() {
+                const dados = coletarTodosDados();
+                const endereco = elementos.endereco.value || 'imovel';
+                const nomeArquivo = `PTAM_${endereco.replace(/[^a-z0-9]/gi, '_')}_${new Date().toISOString().slice(0,10)}.json`;
+                
+                const dadosParaExportar = {
+                    metadata: {
+                        versao: '1.0',
+                        dataExportacao: new Date().toISOString(),
+                        aplicacao: 'Gerador PTAM Professional'
+                    },
+                    dados: dados
+                };
+                
+                const jsonString = JSON.stringify(dadosParaExportar, null, 2);
+                const blob = new Blob([jsonString], { type: 'application/json;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = nomeArquivo;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                mostrarStatus('Dados exportados como arquivo JSON!', 'success');
+            }
+            
+            function importarJSON() {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = '.json';
+                
+                input.onchange = function(e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        try {
+                            const dadosImportados = JSON.parse(event.target.result);
+                            
+                            if (dadosImportados.dados) {
+                                carregarDadosAnalise(dadosImportados.dados);
+                                mostrarStatus('Dados importados com sucesso!', 'success');
+                            } else {
+                                mostrarStatus('Arquivo JSON inválido. Estrutura de dados incorreta.', 'error');
+                            }
+                        } catch (error) {
+                            mostrarStatus('Erro ao ler o arquivo JSON. Verifique o formato.', 'error');
+                            console.error('Erro na importação:', error);
+                        }
+                    };
+                    reader.readAsText(file);
+                };
+                
+                input.click();
+            }
+            
+            function limparTudo() {
+                if (confirm('Tem certeza que deseja limpar todos os dados? Esta ação não pode ser desfeita.')) {
+                    // Limpar todos os campos de entrada
+                    const todosCampos = document.querySelectorAll('input, select, textarea');
+                    todosCampos.forEach(campo => {
+                        if (campo.type === 'checkbox') {
+                            campo.checked = false;
+                        } else if (campo.type === 'date') {
+                            campo.value = new Date().toISOString().split('T')[0];
+                        } else if (campo.tagName === 'SELECT') {
+                            campo.selectedIndex = 0;
+                        } else {
+                            campo.value = '';
+                        }
+                    });
+                    
+                    // Resetar valores padrão
+                    elementos.pavimentos.value = '1';
+                    elementos.vida_util.value = '50';
+                    elementos.qtd_salas.value = '0';
+                    elementos.qtd_banheiros.value = '0';
+                    elementos.vagas_estacionamento.value = '0';
+                    
+                    // Limpar texto de saída
+                    limparTexto();
+                    
+                    // Atualizar contadores e barra de progresso
+                    atualizarContadores();
+                    atualizarBarraProgresso();
+                    atualizarResumoImovel();
+                    
+                    mostrarStatus('Todos os dados foram limpos com sucesso!', 'success');
+                }
+            }
+            
+            function carregarExemplo() {
+                // Dados do Imóvel
+                elementos.zoneamento.value = 'ZUI (Zona de Uso Industrial)';
+                elementos.tipo.value = 'industrial';
+                elementos.endereco.value = 'Rua Berto Círio, 3360, Bairro São Luís, Canoas-RS';
+                elementos.matricula.value = '45.106';
+                elementos.cartorio.value = 'Registro de Imóveis de Canoas-RS';
+                elementos.subgrupo.value = 'pavilhao';
+                elementos.conservacao.value = 'bom';
+                elementos.area_terreno.value = '2100';
+                elementos.area_construida.value = '1200';
+                elementos.area_util.value = '1100';
+                elementos.testada.value = '15.00';
+                elementos.profundidade.value = '140.00';
+                elementos.pavimentos.value = '1';
+                elementos.ano_construcao.value = '2017';
+                elementos.idade_aparente.value = '8';
+                elementos.vida_util.value = '80';
+                
+                // Características
+                elementos.tipo_construcao.value = 'pre-moldado';
+                elementos.padrao_acabamento.value = 'industrial';
+                elementos.descricao_piso.value = 'Concreto polido nas áreas internas, concreto armado nas docas, brita nivelada no pátio';
+                elementos.descricao_cobertura.value = 'Estrutura metálica com telhas de alumínio/zincadas';
+                elementos.distribuicao_ambientes.value = 'O imóvel apresenta excelente funcionalidade operacional, com divisão racional dos espaços: área de oficina, docas internas e externas, estoque, setor administrativo e áreas de apoio';
+                elementos.qtd_salas.value = '5';
+                elementos.qtd_banheiros.value = '3';
+                
+                // Checkboxes de elementos construtivos
+                checkboxes.elem_piso.checked = true;
+                checkboxes.elem_cobertura.checked = true;
+                checkboxes.elem_esquadrias.checked = true;
+                checkboxes.elem_revestimento.checked = true;
+                
+                // Checkboxes de ambientes
+                checkboxes.amb_escritorio.checked = true;
+                checkboxes.amb_refeitorio.checked = true;
+                checkboxes.amb_sanitario.checked = true;
+                checkboxes.amb_vestiario.checked = true;
+                checkboxes.amb_estoque.checked = true;
+                checkboxes.amb_oficina.checked = true;
+                checkboxes.amb_garagem.checked = true;
+                
+                // Infraestrutura
+                elementos.capacidade_eletrica.value = '75';
+                elementos.equipamentos_descricao.value = 'Compressor de ar industrial 12 Bar / 5HP, sistema coletor de óleo para tratamento de efluentes, bancada de trabalho em metalón com kit de ferramentas, bancada de pintura, torno CNC';
+                elementos.vagas_estacionamento.value = '8';
+                elementos.area_externa.value = '900';
+                
+                // Checkboxes de sistemas elétricos
+                checkboxes.eletrica_trifasica.checked = true;
+                checkboxes.eletrica_industrial.checked = true;
+                checkboxes.eletrica_gerador.checked = true;
+                checkboxes.eletrica_solar.checked = true;
+                
+                // Checkboxes de sistemas hidráulicos
+                checkboxes.hidraulica_agua.checked = true;
+                checkboxes.hidraulica_esgoto.checked = true;
+                checkboxes.hidraulica_tratamento.checked = true;
+                
+                // Checkboxes de equipamentos
+                checkboxes.equip_ar_condicionado.checked = true;
+                checkboxes.equip_ventilacao.checked = true;
+                checkboxes.equip_incendio.checked = true;
+                checkboxes.equip_seguranca.checked = true;
+                checkboxes.equip_compressor.checked = true;
+                
+                // Checkboxes de acessos
+                checkboxes.acesso_asfalto.checked = true;
+                checkboxes.acesso_pavimentado.checked = true;
+                checkboxes.acesso_calçada.checked = true;
+                checkboxes.acesso_rampa.checked = true;
+                checkboxes.acesso_doca.checked = true;
+                
+                // Contexto
+                elementos.bairro_classificacao.value = 'industrial';
+                elementos.infraestrutura_urbana.value = 'A área é servida por infraestrutura urbana básica completa, com rede de energia elétrica, abastecimento de água, iluminação pública e sistema viário compatível com o tráfego de veículos pesados';
+                elementos.acessibilidade.value = 'Localizado próximo às rodovias BR-386 e BR-448 (Rodovia do Parque), facilitando o acesso às cidades da Região Metropolitana de Porto Alegre e ao eixo produtivo do Vale dos Sinos';
+                elementos.equipamentos_proximos.value = 'Bases operacionais de transportadoras, centros de distribuição, oficinas, lojas de autopeças, postos de combustíveis e prestadores de serviços técnicos';
+                elementos.descricao_restricoes.value = 'O imóvel encontra-se localizado em região classificada como "área de alagamento permanente", inserida na zona de influência direta dos cursos d\'água da Bacia Hidrográfica do Rio dos Sinos, com recorrência de alagamentos em períodos de precipitação intensa';
+                elementos.documentacao_restricoes.value = 'Conforme estudo técnico divulgado pelo COMITESINOS - Comitê de Gerenciamento da Bacia Hidrográfica do Rio dos Sinos';
+                elementos.tendencia_mercado.value = 'estabilidade';
+                elementos.demanda_regiao.value = 'media';
+                elementos.observacoes_mercado.value = 'A região mantém significativa resiliência operacional, sustentada pela rápida recuperação das atividades industriais e pela continuidade dos investimentos em infraestrutura de drenagem e logística';
+                
+                // Checkboxes de restrições
+                checkboxes.restricao_alagamento.checked = true;
+                checkboxes.restricao_zoneamento.checked = true;
+                
+                // Gerenciamento
+                elementos.observacoes_gerais.value = 'Imóvel industrial adaptado para oficina de caminhões, com excelente infraestrutura operacional. A edificação inclui sala de descanso, refeitório completo, sala dos motoristas climatizada, e escritório administrativo integrado ao centro de operações. O padrão construtivo é de nível médio a superior, apresentando estrutura robusta e bem conservada, adequada para empresas de transporte, oficinas mecânicas, logística ou atividades industriais leves. A construção não possui averbação na matrícula.';
+                elementos.recomendacoes.value = 'Recomenda-se verificar a regularização da construção junto ao órgão municipal competente. Considerar as restrições ambientais relacionadas a alagamentos na análise de viabilidade de uso. O imóvel apresenta excelente potencial para continuidade das atividades atuais ou adaptação para outras atividades industriais compatíveis com o zoneamento.';
+                elementos.avaliador_nome.value = 'Roberto de Paula Fettuccia';
+                elementos.avaliador_creci.value = '083599-F';
+                elementos.data_vistoria.value = new Date().toISOString().split('T')[0];
+                elementos.data_emissao.value = new Date().toISOString().split('T')[0];
+                
+                // Atualizar contadores e barra de progresso
+                atualizarContadores();
+                atualizarBarraProgresso();
+                atualizarResumoImovel();
+                
+                // Gerar o PTAM automaticamente
+                setTimeout(() => {
+                    gerarPTAMCompleto();
+                }, 500);
+                
+                mostrarStatus('Exemplo carregado com sucesso! PTAM sendo gerado...', 'success');
+            }
+            
+            function configurarAutoSave() {
+                // Auto-save básico a cada 30 segundos se houver dados
+                setInterval(() => {
+                    if (elementos.endereco.value && elementos.endereco.value.trim() !== '') {
+                        // Não salvar automaticamente se já tiver muitos saves
+                        const analises = JSON.parse(localStorage.getItem('ptamAnalises') || '[]');
+                        if (analises.length < 20) { // Limite para auto-save
+                            // Verificar se os dados mudaram significativamente
+                            const dadosAtuais = JSON.stringify(coletarTodosDados());
+                            const ultimoAutoSave = localStorage.getItem('ultimoAutoSave');
+                            
+                            if (!ultimoAutoSave || ultimoAutoSave !== dadosAtuais) {
+                                salvarAnalise();
+                                localStorage.setItem('ultimoAutoSave', dadosAtuais);
+                            }
+                        }
+                    }
+                }, 30000); // 30 segundos
+            }
+            
+            function mostrarStatus(mensagem, tipo) {
+                elementos.statusMessage.textContent = mensagem;
+                elementos.statusMessage.className = 'status-message';
+                
+                if (tipo === 'success') {
+                    elementos.statusMessage.classList.add('status-success');
+                } else if (tipo === 'error') {
+                    elementos.statusMessage.classList.add('status-error');
+                } else if (tipo === 'info') {
+                    elementos.statusMessage.classList.add('status-info');
+                }
+                
+                elementos.statusMessage.style.display = 'block';
+                
+                // Remover a mensagem após 5 segundos
+                setTimeout(() => {
+                    elementos.statusMessage.style.display = 'none';
+                }, 5000);
+            }
+            
+            // Tornar as funções disponíveis globalmente para os botões na lista
+            window.carregarAnalisePorId = window.carregarAnalisePorId || function(id) {
+                const analises = JSON.parse(localStorage.getItem('ptamAnalises') || '[]');
+                const analise = analises.find(a => a.id === id);
+                
+                if (analise) {
+                    carregarDadosAnalise(analise.dados);
+                    mostrarStatus(`Análise "${analise.nome}" carregada com sucesso!`, 'success');
+                    modalAnalises.style.display = 'none';
+                }
+            };
+            
+            window.excluirAnalisePorId = window.excluirAnalisePorId || function(id) {
+                if (confirm('Tem certeza que deseja excluir esta análise?')) {
+                    let analises = JSON.parse(localStorage.getItem('ptamAnalises') || '[]');
+                    analises = analises.filter(a => a.id !== id);
+                    
+                    localStorage.setItem('ptamAnalises', JSON.stringify(analises));
+                    carregarAnalisesSalvas();
+                    
+                    mostrarStatus('Análise excluída com sucesso!', 'success');
+                }
+            };
+        });
+    </script>
+</body>
+</html>
